@@ -412,7 +412,8 @@ if (typeof window !== 'undefined') {
     // `Strict` is not used because it has few security benefits but significant usability drawbacks
     // vs. `Lax`. See https://stackoverflow.com/q/41841880 for discussion.
     sameSite: inThirdPartyIframe() ? 'None' : 'Lax',
-    secure: window.location.protocol === 'https:',
+    // Set cookies as secure to allow support on Chrome v80+.
+    secure: true,
   });
 }
 exports.randomString = randomString;

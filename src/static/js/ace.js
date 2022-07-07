@@ -262,14 +262,21 @@ const Ace2Editor = function () {
     requireKernel.src =
         absUrl(`../static/js/require-kernel.js?v=${clientVars.randomVersionString}`);
     innerDocument.head.appendChild(requireKernel);
-    // Pre-fetch modules to improve load performance.
-    for (const module of ['ace2_inner', 'ace2_common']) {
-      const script = innerDocument.createElement('script');
-      script.type = 'text/javascript';
-      script.src = absUrl(`../javascripts/lib/ep_etherpad-lite/static/js/${module}.js` +
-                          `?callback=require.define&v=${clientVars.randomVersionString}`);
-      innerDocument.head.appendChild(script);
-    }
+
+    /* Commented out to prevent race-condition with require-kernal.js
+     * that causes errors on Chrome and Safari
+     * at least until the bug is fixed upstream. 
+     * More info: https://github.com/ether/etherpad-lite/pull/5150
+     */
+
+    // for (const module of ['ace2_inner', 'ace2_common']) {
+    //   const script = innerDocument.createElement('script');
+    //   script.type = 'text/javascript';
+    //   script.src = absUrl(`../javascripts/lib/ep_etherpad-lite/static/js/${module}.js` +
+    //                       `?callback=require.define&v=${clientVars.randomVersionString}`);
+    //   innerDocument.head.appendChild(script);
+    // }
+
     const innerStyle = innerDocument.createElement('style');
     innerStyle.type = 'text/css';
     innerStyle.title = 'dynamicsyntax';

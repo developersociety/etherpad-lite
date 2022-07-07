@@ -51,15 +51,22 @@ exports.padcookie = new class {
   }
 
   writePrefs_(prefs) {
-    Cookies.set(this.cookieName_, JSON.stringify(prefs), {expires: 365 * 100});
+    // Set cookies as secure to allow support on Chrome v80+.
+    Cookies.set(this.cookieName_, JSON.stringify(prefs), {expires: 365 * 100, secure: true});
   }
 
   getPref(prefName) {
-    return this.readPrefs_()[prefName];
+    const prefs = this.readPrefs_();
+    // Prevent null indexing.
+    return prefs ? prefs[prefName] : null;
   }
 
   setPref(prefName, value) {
-    const prefs = this.readPrefs_();
+    let prefs = this.readPrefs_();
+    if (!prefs) {
+        // Prevent null indexing.
+        prefs = {};
+    }
     prefs[prefName] = value;
     this.writePrefs_(prefs);
   }
